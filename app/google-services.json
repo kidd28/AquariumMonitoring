@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "836926034779",
+    "firebase_url": "https://aquariummonitoring-611d8-default-rtdb.firebaseio.com",
+    "project_id": "aquariummonitoring-611d8",
+    "storage_bucket": "aquariummonitoring-611d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836926034779:android:12ca33b2602a6c750d007e",
+        "android_client_info": {
+          "package_name": "com.capstone.aquariummonitoring"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7-FJOM6wEwBNZQIwH89ibc24YLCjeW-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
