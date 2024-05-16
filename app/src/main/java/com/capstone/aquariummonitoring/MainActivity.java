@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<LogModel> logModelArrayList;
     FirebaseUser user;
 
+    Button wifiButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         Datetime = findViewById(R.id.time);
         Date = findViewById(R.id.Date);
         rv = findViewById(R.id.rv);
+        wifiButton = findViewById(R.id.wifiButton);
 
         logModelArrayList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -50,7 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         Date.setText(Cdate.toString());
-
+        wifiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, WifiManager.class));
+            }
+        });
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Info");
         reference.addValueEventListener(new ValueEventListener() {
