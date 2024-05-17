@@ -19,7 +19,7 @@ public class ControlNotification extends AppCompatActivity {
 
     TextView ntu, Date, Datetime,Status,message;
     Button activate, stop;
-
+    Boolean ForceStart ;
     String status,NTU,ForeceAvtive;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +38,25 @@ public class ControlNotification extends AppCompatActivity {
         java.sql.Date Cdate = new java.sql.Date(millis);
         Date.setText(Cdate.toString());
 
+
+        ForceStart = false;
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Turbidity");
         reference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 status = "" + snapshot.child("Status").getValue();
                 Status.setText(status);
 
-                if(status.equals("Active")){
+                if(status.equals("Active") && !ForceStart) {
+                    stop.setVisibility(View.GONE);
+                    message.setVisibility(View.VISIBLE);
+                    activate.setVisibility(View.GONE);
+                } else if (status.equals("Active") && ForceStart) {
                     stop.setVisibility(View.VISIBLE);
                     message.setVisibility(View.VISIBLE);
                     activate.setVisibility(View.GONE);
-                }else if (status.equals("Idle")){
+                } else if (status.equals("Idle")){
                     activate.setVisibility(View.VISIBLE);
                     message.setVisibility(View.GONE);
                     stop.setVisibility(View.GONE);
@@ -79,9 +86,6 @@ public class ControlNotification extends AppCompatActivity {
         activate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("ForceActivate");
                 reference.child("Activate").setValue("Yes").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -91,6 +95,7 @@ public class ControlNotification extends AppCompatActivity {
                         message.setVisibility(View.GONE);
                         activate.setVisibility(View.GONE);
                         stop.setVisibility(View.VISIBLE);
+                        ForceStart =true;
                     }
                 });
             }
@@ -109,7 +114,7 @@ public class ControlNotification extends AppCompatActivity {
                         message.setVisibility(View.GONE);
                         activate.setVisibility(View.VISIBLE);
                         stop.setVisibility(View.GONE);
-
+                        ForceStart =false;
                     }
                 });
             }
