@@ -20,7 +20,7 @@ public class ControlNotification extends AppCompatActivity {
     TextView ntu, Date, Datetime,Status,message;
     Button activate, stop;
     Boolean ForceStart ;
-    String status,NTU,ForeceAvtive;
+    String status,NTU,ForeceActive;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,36 +38,59 @@ public class ControlNotification extends AppCompatActivity {
         java.sql.Date Cdate = new java.sql.Date(millis);
         Date.setText(Cdate.toString());
 
+        message.setVisibility(View.GONE);
+        activate.setVisibility(View.GONE);
+        stop.setVisibility(View.GONE);
+
 
         ForceStart = false;
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Turbidity");
         reference1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 status = "" + snapshot.child("Status").getValue();
                 Status.setText(status);
+                DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference("ForceActivate");
+                reference2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ForeceActive = "" + snapshot.child("Activate").getValue();
 
-                if(status.equals("Active") && !ForceStart) {
-                    stop.setVisibility(View.GONE);
-                    message.setVisibility(View.VISIBLE);
-                    activate.setVisibility(View.GONE);
-                } else if (status.equals("Active") && ForceStart) {
-                    stop.setVisibility(View.VISIBLE);
-                    message.setVisibility(View.VISIBLE);
-                    activate.setVisibility(View.GONE);
-                } else if (status.equals("Idle")){
-                    activate.setVisibility(View.VISIBLE);
-                    message.setVisibility(View.GONE);
-                    stop.setVisibility(View.GONE);
-                }
+                        if(status.equals("Idle")&& ForeceActive.equals("No")){
+                            message.setVisibility(View.GONE);
+                            activate.setVisibility(View.VISIBLE);
+                            stop.setVisibility(View.GONE);
+                        }else if (status.equals("Idle")&& ForeceActive.equals("Stop") ) {
+                            message.setVisibility(View.GONE);
+                            activate.setVisibility(View.VISIBLE);
+                            stop.setVisibility(View.GONE);
+                        }
+                        else if (status.equals("Active")&& ForeceActive.equals("Yes") ) {
+                            message.setVisibility(View.GONE);
+                            activate.setVisibility(View.GONE);
+                            stop.setVisibility(View.VISIBLE);
+                        }else if (status.equals("Active")&& ForeceActive.equals("No") ) {
+                            message.setVisibility(View.VISIBLE);
+                            activate.setVisibility(View.GONE);
+                            stop.setVisibility(View.GONE);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
+
+
+
+
+
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Info");
         reference.addValueEventListener(new ValueEventListener() {
@@ -92,10 +115,7 @@ public class ControlNotification extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Turbidity");
                         reference1.child("Status").setValue("Active");
-                        message.setVisibility(View.GONE);
-                        activate.setVisibility(View.GONE);
-                        stop.setVisibility(View.VISIBLE);
-                        ForceStart =true;
+
                     }
                 });
             }
@@ -108,13 +128,8 @@ public class ControlNotification extends AppCompatActivity {
                 reference.child("Activate").setValue("Stop").addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-
                         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Turbidity");
                         reference1.child("Status").setValue("Idle");
-                        message.setVisibility(View.GONE);
-                        activate.setVisibility(View.VISIBLE);
-                        stop.setVisibility(View.GONE);
-                        ForceStart =false;
                     }
                 });
             }
