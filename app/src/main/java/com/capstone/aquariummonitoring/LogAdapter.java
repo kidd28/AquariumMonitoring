@@ -38,7 +38,6 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.HolderAdapter> {
         String SDuration = logmodel.Duration;
         String Duration = convertSeconds(Integer.valueOf(SDuration));
 
-
         holder.ntu.setText(aveTurbidity);
         holder.DateTime.setText(DateTime);
         holder.Duration.setText(Duration);

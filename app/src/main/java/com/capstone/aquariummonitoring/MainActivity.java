@@ -2,10 +2,18 @@ package com.capstone.aquariummonitoring;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,13 +31,13 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
-    TextView ntu, Date, Datetime;
-    String NTU, TIME, DATE;
+    TextView ntu, Date, Datetime,Status;
+    String NTU, status, DATE;
     RecyclerView rv;
     ArrayList<LogModel> logModelArrayList;
     FirebaseUser user;
 
-    Button wifiButton;
+    Button wifiButton,control;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         Date = findViewById(R.id.Date);
         rv = findViewById(R.id.rv);
         wifiButton = findViewById(R.id.wifiButton);
+        Status = findViewById(R.id.Status);
+        control = findViewById(R.id.control);
 
         logModelArrayList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -55,11 +65,18 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(Cdate);
 
 
+        control.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ControlNotification.class));
+            }
+        });
         Date.setText(Cdate.toString());
         wifiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, WifiManager.class));
+
             }
         });
 
@@ -69,9 +86,24 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 NTU = "" + snapshot.child("Turbidity").getValue();
                 ntu.setText(NTU);
+                if(Integer.parseInt(NTU)>30){
+                    sendNotification( "Click to see turbidity level and make action.","Too high turbidity");
+                }
 
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Turbidity");
+        reference1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                 status = "" + snapshot.child("Status").getValue();
+                Status.setText(status);
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -103,6 +135,38 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
+    public void sendNotification (String message, String title ){
+
+        Intent intent = new Intent(getApplicationContext(), ControlNotification.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent,
+                PendingIntent.FLAG_IMMUTABLE);
+        String channelId = "some_channel_id";
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.mipmap.ic_launcher_round)
+//                        .setContentTitle(getString(R.string.app_name)
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        assert notificationManager != null;
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
 }
