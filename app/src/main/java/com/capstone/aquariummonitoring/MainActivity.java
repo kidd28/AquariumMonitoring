@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                     Dur.setVisibility(View.VISIBLE);
                     Wait.setVisibility(View.GONE);
                     getCurrentcountdown();
-
                    /* DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference("CurrentDrain");
                     reference4.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     });*/
-
                 }else if(status.equals("Idle")){
                     Wait.setVisibility(View.VISIBLE);
                     Dur.setVisibility(View.GONE);
@@ -156,9 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
         logModelArrayList.clear();
         loadLogs();
-
-
-
     }
 
     private void getCurrentcountdown() {
