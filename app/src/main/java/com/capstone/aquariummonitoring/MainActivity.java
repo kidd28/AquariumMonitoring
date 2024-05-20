@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -117,33 +118,15 @@ public class MainActivity extends AppCompatActivity {
                 status = "" + snapshot.child("Status").getValue();
                 Status.setText(status);
                 if(status.equals("Active")){
+                    getCurrentcountdown();
                     Dur.setVisibility(View.VISIBLE);
                     Wait.setVisibility(View.GONE);
-                    getCurrentcountdown();
-                   /* DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference("CurrentDrain");
-                    reference4.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String duration = ""+snapshot.child("Duration").getValue();
-                            String state = ""+snapshot.child("State").getValue();
 
-                            long endTime = System.currentTimeMillis() + (Long.parseLong(duration)* 1000);
-
-                            if(state.equals("Started")){
-                                getCurrentcountdown();
-                            }else {
-                                reference4.child("EndTime").setValue(endTime);
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });*/
                 }else if(status.equals("Idle")){
+                    getWaitingTime();
                     Wait.setVisibility(View.VISIBLE);
                     Dur.setVisibility(View.GONE);
-                    showWaiting(43200000);
+
                 }
             }
             @Override
@@ -156,16 +139,65 @@ public class MainActivity extends AppCompatActivity {
         loadLogs();
     }
 
-    private void getCurrentcountdown() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("CurrentDrain");
-        reference.child("EndTime").addListenerForSingleValueEvent(new ValueEventListener() {
+    private void getWaitingTime() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("NextDrain");
+        reference.child("Waiting").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 long endTime = dataSnapshot.getValue(Long.class);
                 long currentTime = System.currentTimeMillis();
-                long timeLeft = endTime - currentTime;
 
+
+                long timeLeft = (endTime - currentTime)- 28800000;
+
+                System.out.println(timeLeft);
+
+                startCountdownFornext(timeLeft);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle possible errors.
+            }
+        });
+    }
+
+    private void startCountdownFornext(long timeLeft) {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        countDownTimer = new CountDownTimer(timeLeft, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long seconds = millisUntilFinished / 1000;
+                long minutes = seconds / 60;
+                long hours = minutes / 60;
+
+                seconds = seconds % 60;
+                minutes = minutes % 60;
+
+                Waiting.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            }
+
+            public void onFinish() {
+                Waiting.setText("00:00:00");
+            }
+        }.start();
+
+    }
+
+    private void getCurrentcountdown() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("CurrentDrain");
+        reference.child("EndTime").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                long endTime = dataSnapshot.getValue(Long.class);
+                long currentTime = System.currentTimeMillis();
+
+                long timeLeft = (endTime - currentTime)- 28800000;
+                System.out.println(timeLeft);
                 startCountdown(timeLeft);
             }
 
@@ -222,38 +254,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showWaiting(int milliseconds){
-        new CountDownTimer(milliseconds, 1000) {
-            public void onTick(long millisUntilFinished) {
-                // Used for formatting digit to be in 2 digits only
-                NumberFormat f = new DecimalFormat("00");
-                long hour = (millisUntilFinished / 3600000) % 24;
-                long min = (millisUntilFinished / 60000) % 60;
-                long sec = (millisUntilFinished / 1000) % 60;
-                Waiting.setText(f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
-            }
-            // When the task is over it will print 00:00:00 there
-            public void onFinish() {
-                Waiting.setText("00:00:00");
-            }
-        }.start();
-    }
-    private void showDuration(int milliseconds) {
-        new CountDownTimer(milliseconds, 1000) {
-            public void onTick(long millisUntilFinished) {
-                // Used for formatting digit to be in 2 digits only
-                NumberFormat f = new DecimalFormat("00");
-                long hour = (millisUntilFinished / 3600000) % 24;
-                long min = (millisUntilFinished / 60000) % 60;
-                long sec = (millisUntilFinished / 1000) % 60;
-                Duration.setText(f.format(hour) + ":" + f.format(min) + ":" + f.format(sec));
-            }
-            // When the task is over it will print 00:00:00 there
-            public void onFinish() {
-                Duration.setText("00:00:00");
-            }
-        }.start();
-    }
+
 
     public void sendNotification (String message, String title ){
 
