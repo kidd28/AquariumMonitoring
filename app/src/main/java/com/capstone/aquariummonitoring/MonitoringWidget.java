@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.widget.RemoteViews;
 
@@ -26,19 +27,19 @@ public class MonitoringWidget extends AppWidgetProvider {
 
     public static final String WIDGET_IDS_KEY ="mywidgetproviderwidgetids";
     public static final String WIDGET_DATA_KEY ="mywidgetproviderwidgetdata";
-
+    public static CountDownTimer countDownTimer;
+    public static  RemoteViews views;
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int[] appWidgetId) {
 
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.monitoring_widget);
+        views = new RemoteViews(context.getPackageName(), R.layout.monitoring_widget);
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent, PendingIntent.FLAG_IMMUTABLE
         );
 
         views.setOnClickPendingIntent(R.id.CurrentTurbidity, pendingIntent);
-        views.setOnClickPendingIntent(R.id.Level, pendingIntent);
         views.setOnClickPendingIntent(R.id.Status, pendingIntent);
 
 
@@ -61,7 +62,6 @@ public class MonitoringWidget extends AppWidgetProvider {
                         context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                 remoteViews.setOnClickPendingIntent(R.id.CurrentTurbidity, pendingIntent);
-                remoteViews.setOnClickPendingIntent(R.id.Level, pendingIntent);
                 remoteViews.setOnClickPendingIntent(R.id.Status, pendingIntent);
 
                 appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -91,7 +91,6 @@ public class MonitoringWidget extends AppWidgetProvider {
                         context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                 remoteViews.setOnClickPendingIntent(R.id.CurrentTurbidity, pendingIntent);
-                remoteViews.setOnClickPendingIntent(R.id.Level, pendingIntent);
                 remoteViews.setOnClickPendingIntent(R.id.Status, pendingIntent);
 
                 appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -108,6 +107,9 @@ public class MonitoringWidget extends AppWidgetProvider {
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
+
+
+
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {

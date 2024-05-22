@@ -254,8 +254,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
     public void sendNotification (String message, String title ){
 
         Intent intent = new Intent(getApplicationContext(), ControlNotification.class);
