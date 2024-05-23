@@ -11,14 +11,18 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
@@ -29,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -45,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
     Button wifiButton,control;
     LinearLayout Dur, Wait;
     private CountDownTimer countDownTimer;
+
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String PREF_SPINNER_POSITION = "SpinnerPosition";
+
+    Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +73,49 @@ public class MainActivity extends AppCompatActivity {
         Duration = findViewById(R.id.Duration);
         Waiting = findViewById(R.id.Waiting);
 
+        spinner = findViewById(R.id.spinner);
+
+
+        ArrayList<Integer> values = new ArrayList<>();
+        for (int i = 1; i <= 24; i++) {
+            values.add(i);
+        }
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, values);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+        // Retrieve the saved spinner position from SharedPreferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        int spinnerPosition = settings.getInt(PREF_SPINNER_POSITION, 0);
+        spinner.setSelection(spinnerPosition);
+
+
+        // Set an item selected listener to get the selected value
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Save the selected spinner position to SharedPreferences
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt(PREF_SPINNER_POSITION, position);
+                editor.apply();
+
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("NextTimeInterval");
+                reference.child("Hours").setValue(position+1);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case where no item is selected if necessary
+            }
+        });
 
         logModelArrayList = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -139,6 +192,20 @@ public class MainActivity extends AppCompatActivity {
         loadLogs();
     }
 
+    private void setSpinnerDropdownHeight(Spinner spinner, int height) {
+        try {
+            Field popupField = Spinner.class.getDeclaredField("mPopup");
+            popupField.setAccessible(true);
+
+            // For API level 16 and above
+            Object popup = popupField.get(spinner);
+            if (popup != null && popup instanceof android.widget.ListPopupWindow) {
+                ((android.widget.ListPopupWindow) popup).setHeight(height);
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
     private void getWaitingTime() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("NextDrain");
         reference.child("Waiting").addValueEventListener(new ValueEventListener() {

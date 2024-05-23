@@ -14,17 +14,18 @@
         android:gravity="center"
         android:orientation="vertical">
 
+
         <LinearLayout
-            android:layout_gravity="left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:text="Drain Status: "
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -34,10 +35,10 @@
 
             <TextView
                 android:id="@+id/Status"
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:text="Active"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -46,17 +47,41 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/Dur"
             android:layout_gravity="left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:text="Time Interval :"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.capstone.aquariummonitoring.CustomSpinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Dur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:text="Duration: "
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -66,10 +91,10 @@
 
             <TextView
                 android:id="@+id/Duration"
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:text="00:00:00"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -77,18 +102,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/Wait"
-            android:layout_gravity="left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:text="Next Water Drain: "
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -98,10 +124,10 @@
 
             <TextView
                 android:id="@+id/Waiting"
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:text="00:00:00"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -144,21 +170,22 @@
 
 
             <DigitalClock
-                android:layout_gravity="center"
                 android:id="@+id/time"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textSize="20sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/Date"
-                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:text="1:06 am"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -169,20 +196,20 @@
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="400dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
             app:cardCornerRadius="10dp">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_margin="10dp"
+                android:id="@+id/rv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/rv"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dp" />
 
         </androidx.cardview.widget.CardView>
 
@@ -190,11 +217,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/control"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="Controler" />
+
             <Button
                 android:id="@+id/wifiButton"
                 android:layout_width="150dp"
@@ -202,9 +231,6 @@
                 android:text="Wifi Manager" />
 
         </LinearLayout>
-
-
-
 
 
     </LinearLayout>
