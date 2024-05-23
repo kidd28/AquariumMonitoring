@@ -4,16 +4,109 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#58BFCC"
     android:layout_gravity="center"
     android:gravity="center"
     tools:context=".ControlNotification">
 
 
     <LinearLayout
-        android:gravity="center"
+        android:gravity="top|center"
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+        <Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="#01899B"
+            android:title="Aquarium Monitoring"
+            android:titleTextColor="@color/white" />
+
+        <TextView
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Control Panel"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/_5sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:text="Next time interval :"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/custom_spn_background">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:popupBackground="@drawable/spinner_popup_bg"
+                    android:textColor="@color/white" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:text="Aquarium Size(L) :"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:background="@drawable/custom_spn_background">
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:popupBackground="@drawable/spinner_popup_bg" />
+            </FrameLayout>
+
+        </LinearLayout>
         <LinearLayout
 
             android:layout_width="wrap_content"
@@ -21,6 +114,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/ntu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,6 +126,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ntu"
@@ -48,6 +143,7 @@
 
 
             <DigitalClock
+                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:id="@+id/time"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -58,6 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/Date"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
@@ -79,6 +176,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:textColor="@color/white"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,6 +189,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:textColor="@color/white"
                 android:id="@+id/Status"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="wrap_content"
@@ -118,18 +217,20 @@
             android:layout_height="wrap_content"
             android:text="Stop" />
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/message"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_margin="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:text="WaterPump Status is already active, no action needed. If warning still persist, please check the Aquarium Asap to see what happened."
+            android:text="Draining Status is already active, no action needed. Please wait before the scheduled drain is done."
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
     </LinearLayout>
 

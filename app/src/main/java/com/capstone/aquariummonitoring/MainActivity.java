@@ -11,14 +11,19 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
@@ -29,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -45,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
     Button wifiButton,control;
     LinearLayout Dur, Wait;
     private CountDownTimer countDownTimer;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         Wait = findViewById(R.id.Wait);
         Duration = findViewById(R.id.Duration);
         Waiting = findViewById(R.id.Waiting);
+
+
+
 
 
         logModelArrayList = new ArrayList<>();
@@ -139,6 +152,20 @@ public class MainActivity extends AppCompatActivity {
         loadLogs();
     }
 
+    private void setSpinnerDropdownHeight(Spinner spinner, int height) {
+        try {
+            Field popupField = Spinner.class.getDeclaredField("mPopup");
+            popupField.setAccessible(true);
+
+            // For API level 16 and above
+            Object popup = popupField.get(spinner);
+            if (popup != null && popup instanceof android.widget.ListPopupWindow) {
+                ((android.widget.ListPopupWindow) popup).setHeight(height);
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
     private void getWaitingTime() {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("NextDrain");
         reference.child("Waiting").addValueEventListener(new ValueEventListener() {
@@ -181,7 +208,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                Waiting.setText("00:00:00");
+
+                Waiting.setText("Loading Please wait...");
             }
         }.start();
 
@@ -227,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                Duration.setText("00:00:00");
+                Duration.setText("Loading Please wait...");
             }
         }.start();
     }

@@ -3,9 +3,13 @@ package com.capstone.aquariummonitoring;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,12 +19,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class ControlNotification extends AppCompatActivity {
 
     TextView ntu, Date, Datetime,Status,message;
     Button activate, stop;
     Boolean ForceStart ;
     String status,NTU,ForeceActive;
+    Spinner spinner,spinner1;
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String PREF_SPINNER_POSITION = "SpinnerPosition";
+    private static final String PREF_SPINNER_POSITION1 = "SpinnerPosition1";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +52,8 @@ public class ControlNotification extends AppCompatActivity {
         activate.setVisibility(View.GONE);
         stop.setVisibility(View.GONE);
 
-
+        spinner = findViewById(R.id.spinner);
+        spinner1 = findViewById(R.id.spinner1);
         ForceStart = false;
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference("Turbidity");
         reference1.addValueEventListener(new ValueEventListener() {
@@ -88,7 +99,78 @@ public class ControlNotification extends AppCompatActivity {
         });
 
 
+        ArrayList<String> values = new ArrayList<>();
+        for (int i = 1; i <= 24; i++) {
+            values.add(String.valueOf(i)+" hour(s)");
+        }
 
+        ArrayList<String> values1 = new ArrayList<>();
+        for (int i = 1; i <= 18; i++) {
+            values1.add(String.valueOf(i)+" Liter(s)");
+        }
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, values);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, values1);
+
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner1.setAdapter(adapter1);
+
+        // Retrieve the saved spinner position from SharedPreferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        int spinnerPosition = settings.getInt(PREF_SPINNER_POSITION, 0);
+        int spinnerPosition1 = settings.getInt(PREF_SPINNER_POSITION1, 0);
+        spinner.setSelection(spinnerPosition);
+        spinner1.setSelection(spinnerPosition1);
+
+
+        // Set an item selected listener to get the selected value
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Save the selected spinner position to SharedPreferences
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt(PREF_SPINNER_POSITION, position);
+                editor.apply();
+
+
+
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("NextTimeInterval");
+                reference.child("Hours").setValue(position+1);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case where no item is selected if necessary
+            }
+        });
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Save the selected spinner position to SharedPreferences
+                SharedPreferences settings1 = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor1 = settings1.edit();
+                editor1.putInt(PREF_SPINNER_POSITION1, position);
+                editor1.apply();
+
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("AquariumSize");
+                reference.child("Liter").setValue(position+1);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case where no item is selected if necessary
+            }
+        });
 
 
 

@@ -7,5 +7,6 @@
     <style name="Theme.AquariumMonitoring.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault.DayNight">
         <item name="appWidgetRadius">@android:dimen/system_app_widget_background_radius</item>
         <item name="appWidgetInnerRadius">@android:dimen/system_app_widget_inner_radius</item>
+        <item name="android:colorPrimary">#59AE62</item>
     </style>
 </resources>
