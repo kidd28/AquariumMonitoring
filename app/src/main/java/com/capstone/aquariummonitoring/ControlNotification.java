@@ -3,6 +3,7 @@ package com.capstone.aquariummonitoring;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 public class ControlNotification extends AppCompatActivity {
 
     TextView ntu, Date, Datetime,Status,message;
-    Button activate, stop;
+    Button activate, stop,save;
     Boolean ForceStart ;
     String status,NTU,ForeceActive;
     Spinner spinner,spinner1;
@@ -172,7 +173,15 @@ public class ControlNotification extends AppCompatActivity {
             }
         });
 
+        save = findViewById(R.id.save);
 
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ControlNotification.this,MainActivity.class));
+                finish();
+            }
+        });
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Info");
         reference.addValueEventListener(new ValueEventListener() {
@@ -217,5 +226,12 @@ public class ControlNotification extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(ControlNotification.this,MainActivity.class));
+        finish();
     }
 }

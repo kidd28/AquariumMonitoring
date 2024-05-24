@@ -5,28 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="#58BFCC"
+    android:background="@drawable/my_gradient_drawable"
     android:gravity="top|center"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="top|center"
         android:orientation="vertical">
 
         <Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="#01899B"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="#006D9E"
             android:title="Aquarium Monitoring"
             android:titleTextColor="@color/white" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:orientation="horizontal">
 
             <TextView
@@ -193,23 +193,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
-        <androidx.cardview.widget.CardView
+        <RelativeLayout
+            android:background="@drawable/layout_bg"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="20dp"
-            app:cardBackgroundColor="#01899B"
-            app:cardCornerRadius="10dp">
+            android:layout_height="@dimen/_300sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_20sdp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_margin="10dp" />
-        </androidx.cardview.widget.CardView>
+                android:layout_margin="@dimen/_10sdp" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -218,14 +217,16 @@
 
             <Button
                 android:id="@+id/control"
-                android:layout_width="150dp"
+                android:textColor="@color/light_blue_900"
+                android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/_20sdp"
                 android:text="Controler" />
 
             <Button
                 android:id="@+id/wifiButton"
-                android:layout_width="150dp"
+                android:textColor="@color/light_blue_900"
+                android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
                 android:text="Wifi Manager" />
 

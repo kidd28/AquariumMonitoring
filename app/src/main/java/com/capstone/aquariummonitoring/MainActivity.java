@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ControlNotification.class));
+                finish();
             }
         });
         Date.setText(Cdate.toString());
@@ -315,4 +316,9 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
