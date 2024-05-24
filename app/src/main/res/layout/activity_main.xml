@@ -217,7 +217,7 @@
 
             <Button
                 android:id="@+id/control"
-                android:textColor="@color/light_blue_900"
+                android:textColor="#006D9E"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/_20sdp"
@@ -225,7 +225,7 @@
 
             <Button
                 android:id="@+id/wifiButton"
-                android:textColor="@color/light_blue_900"
+                android:textColor="#006D9E"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="wrap_content"
                 android:text="Wifi Manager" />
