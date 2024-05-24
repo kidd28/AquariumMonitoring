@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#58BFCC"
+    android:background="@drawable/my_gradient_drawable"
     android:layout_gravity="center"
     android:gravity="center"
     tools:context=".ControlNotification">
@@ -207,12 +207,14 @@
         <Button
             android:layout_marginTop="@dimen/_20sdp"
             android:id="@+id/activate"
+            android:textColor="@color/light_blue_900"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Force Activate" />
         <Button
             android:layout_marginTop="@dimen/_20sdp"
             android:id="@+id/stop"
+            android:textColor="@color/light_blue_900"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Stop" />
@@ -224,6 +226,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAlignment="center"
+
             android:text="Draining Status is already active, no action needed. Please wait before the scheduled drain is done."
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -240,6 +243,7 @@
         android:layout_marginBottom="@dimen/_20sdp"
         android:layout_alignParentBottom="true"
         android:id="@+id/save"
+        android:textColor="@color/light_blue_900"
         android:layout_marginStart="@dimen/_100sdp"
         android:layout_marginEnd="@dimen/_100sdp"
         android:layout_width="match_parent"
